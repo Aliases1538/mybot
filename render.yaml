@@ -1,0 +1,43 @@
+# render.yaml — Render.com konfiguratsiyasi
+# Ushbu fayl Node.js asosidagi "mybot" loyihasi uchun yozilgan.
+# Agar Dockerfile ishlatmoqchi bo'lsangiz, `env: docker` deb o'zgartiring
+services:
+  - type: web
+    name: mybot-web
+    env: node
+    branch: main
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm run start
+    region: oregon
+    autoDeploy: true
+    healthCheckPath: /health
+    instances: 1
+    disk: 512
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: DISCORD_TOKEN
+        fromSecret: DISCORD_TOKEN
+      - key: DATABASE_URL
+        fromSecret: DATABASE_URL
+
+  - type: worker
+    name: mybot-worker
+    env: node
+    branch: main
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm run worker
+    autoDeploy: true
+    instances: 1
+    disk: 256
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DISCORD_TOKEN
+        fromSecret: DISCORD_TOKEN
+      - key: REDIS_URL
+        fromSecret: REDIS_URL
