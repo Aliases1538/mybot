@@ -12,8 +12,6 @@ services:
     region: oregon
     autoDeploy: true
     healthCheckPath: /health
-    instanceCount: 1
-    disk: "512MB"
     envVars:
       - key: NODE_ENV
         value: production
@@ -32,8 +30,6 @@ services:
     buildCommand: npm ci
     startCommand: npm run worker
     autoDeploy: true
-    instanceCount: 1
-    disk: "256MB"
     envVars:
       - key: NODE_ENV
         value: production
